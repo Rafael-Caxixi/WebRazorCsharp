@@ -1,0 +1,6 @@
+@WebRazorAPI_HostAddress = http://localhost:5267
+
+GET {{WebRazorAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

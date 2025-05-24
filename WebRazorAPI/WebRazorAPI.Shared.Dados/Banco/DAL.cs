@@ -1,0 +1,38 @@
+﻿using WebRazorAPI.Modelos;
+
+namespace WebRazorAPI.Banco;
+
+public class DAL<T> where T : class
+{
+    protected readonly WebRazorContext context;
+
+    public DAL(WebRazorContext context)
+    {
+        this.context = context;
+    }
+
+    public IEnumerable<T> Listar()
+    {
+        return context.Set<T>().ToList();
+    }
+    public void Adicionar(T objeto)
+    {
+        context.Set<T>().Add(objeto);
+        context.SaveChanges();
+    }
+    public void Deletar(T objeto)
+    {
+        context.Set<T>().Remove(objeto);
+        context.SaveChanges();
+    }
+    public void Atualizar(T objeto)
+    {
+        context.Set<T>().Update(objeto);
+        context.SaveChanges();
+    }
+
+    public T? RecuperaPor(Func<T, bool> condicao)
+    {
+        return context.Set<T>().FirstOrDefault(condicao);
+    }
+}

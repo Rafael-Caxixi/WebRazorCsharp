@@ -56,12 +56,12 @@ public static class CinemasExtensions
 
         app.MapPut("/cinemas/{id}", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequestEdit cinemaRequest) =>
         {
-            var cinemaExistente = dal.RecuperaPor(c => c.Id == cinemaRequest.id);
+            var cinemaExistente = dal.RecuperaPor(c => c.Id == cinemaRequest.Id);
             if (cinemaExistente is null)
             {
                 return Results.NotFound("Cinema não encontrado.");
             }
-            cinemaExistente.Nome = cinemaRequest.nome;
+            cinemaExistente.Nome = cinemaRequest.Nome;
             dal.Atualizar(cinemaExistente);
             return Results.Ok($"Cinema {cinemaExistente.Nome} atualizado com sucesso.");
         });

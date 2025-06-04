@@ -8,6 +8,11 @@
 @*     <MudCardContent>
         <MudText Typo="Typo.body2">@Cinema!.Id</MudText>
     </MudCardContent> *@
+    <MudCardActions>
+        <MudButton Color="Color.Warning"
+                   Variant="Variant.Outlined"
+                   Href=@($"/editar-cinema/{Cinema!.Nome}")>Detalhes</MudButton>
+    </MudCardActions>
 </MudCard>
 
 

@@ -1,4 +1,5 @@
-﻿@page "/editar-cinema{NomeArtista}"
+﻿@page "/editar-cinema/{NomeCinema}"
+@inject ISnackbar Snackbar
 @inject CinemaAPI cinemaAPI
 @inject NavigationManager navigationManager
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
@@ -20,18 +21,23 @@
                       RequiredError="Campo obrigatório." /> *@
 
         <div class="d-flex align-center justify-space-between mt-4">
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Cadastrar"
-                       Color="Color.Primary"
-                       Class="ml-auto">
-                Cadastrar
-            </MudButton>
-            <MudButton Variant="Variant.Filled"
+             <MudButton Variant="Variant.Filled"
                        @onclick="Listar"
                        Color="Color.Primary"
                        Class="ml-auto">
-                Ver cinemas cadastrados
+                Voltar
+            </MudButton> 
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Error"
+                       OnClick="Deletar">
+                Deletar
             </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Success"
+                       OnClick="Salvar">
+                Salvar
+            </MudButton>
+
         </div>
 
     </MudForm>
@@ -40,16 +46,34 @@
 @code {
     private string? nome;
     [Parameter]
-    public string? NomeArtista { get; set; }
+    public string? NomeCinema { get; set; }
     public CinemaResponse cinemaResponse { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        cinemaResponse = await cinemaAPI.GetCinemaPorNomeAsync(NomeCinema);
+        nome = cinemaResponse!.Nome;
+    }
     private async Task Deletar()
     {
         await cinemaAPI.DeleteCinemaAsync(cinemaResponse!.Id);
+        Snackbar.Add("Cinema deletado com sucesso!", Severity.Success);
+        await Task.Delay(1000);
+        navigationManager.NavigateTo("/cinemas");
+    }
+
+    public async Task Salvar()
+    {
+        var cinemaRequestEdit = new CinemaRequestEdit(cinemaResponse.Id,nome!);
+        await cinemaAPI.UpdateCinemaAsync(cinemaRequestEdit);
+        Snackbar.Add("Cinema alterado com sucesso!", Severity.Success);
+        await Task.Delay(1000);
+        navigationManager.NavigateTo("/cinemas");
     }
 
     private async Task Listar()
     {
         navigationManager.NavigateTo("/cinemas");
     }
+
 }

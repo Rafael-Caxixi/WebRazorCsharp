@@ -1,5 +1,6 @@
 ﻿@page "/cadastrar-cinema"
 @inject CinemaAPI cinemaAPI
+@inject ISnackbar Snackbar
 @inject NavigationManager navigationManager
 <h3>CadastrarCinema</h3>
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
@@ -27,12 +28,6 @@
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Listar"
-                       Color="Color.Primary"
-                       Class="ml-auto">
-                Ver cinemas cadastrados
-            </MudButton>
         </div>
 
     </MudForm>
@@ -45,10 +40,9 @@
     {
         var request = new CinemaRequest(nome!);
         await cinemaAPI.AddCinemasAsync(request);
-    }
-
-    private async Task Listar()
-    {
+        Snackbar.Add("Cinema cadastrado com sucesso!", Severity.Success);
+        await Task.Delay(1000);
         navigationManager.NavigateTo("/cinemas");
     }
+
 }

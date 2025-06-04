@@ -21,13 +21,18 @@ public class CinemaAPI
         await _httpClient.PostAsJsonAsync("cinemas", cinemaRequest);
     }
 
-    public async Task DeleteCinemasAsync(int id)
+    public async Task DeleteCinemaAsync(int id)
     {
         await _httpClient.DeleteAsync($"cinemas/{id}");
     }
 
-    public async Task GetCinemaPorNomeAsync(string nome)
+    public async Task UpdateCinemaAsync(CinemaRequestEdit cinemaRequestEdit)
     {
-        await _httpClient.GetFromJsonAsync<CinemaResponse>($"cinemas/{nome}");
+        await _httpClient.PutAsJsonAsync($"cinemas/${cinemaRequestEdit.Id}", cinemaRequestEdit);
+    }
+
+    public async Task<CinemaResponse> GetCinemaPorNomeAsync(string nome)
+    {
+        return await _httpClient.GetFromJsonAsync<CinemaResponse>($"cinemas/{nome}");
     }
 }

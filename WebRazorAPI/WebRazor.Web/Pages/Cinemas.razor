@@ -1,21 +1,47 @@
 ﻿@page "/cinemas"
 @inject CinemaAPI cinemaAPI
-<h3>Cinemas</h3>
-@if(cinemas is not null){
+
+<MudStack Class="mt-4 mb-4" Row="true" Justify="Justify.SpaceBetween">
+    <MudText Class="mb-4" Typo="Typo.h4">Cinemas cadastrados</MudText>
+    <MudPagination Count="@totalPaginas" SelectedChanged="MudarPagina"></MudPagination>
+</MudStack>
+
+@if (cinemasPorPagina is not null)
+{
     <MudGrid> 
-    @foreach(var cinema in cinemas)
-    {
-        <MudItem xs="3">
-        <CardCinema Cinema="cinema"/>
-        </MudItem>
-    }
+        @foreach (var cinema in cinemasPorPagina)
+        {
+            <MudItem xs="3">
+                <CardCinema Cinema="cinema" />
+            </MudItem>
+        }
     </MudGrid>
 }
 @code {
     private ICollection<CinemaResponse>? cinemas;
+    private int tamanho = 8;
+    private int totalItens;
+    private int totalPaginas;
+    private ICollection<CinemaResponse>? cinemasPorPagina;
 
     protected override async Task OnInitializedAsync()
     {
         cinemas = await cinemaAPI.GetCinemasAsync();
+        if (cinemas is not null)
+        {
+            cinemas = cinemas.OrderByDescending(c => c.Id).ToList();
+            totalItens = cinemas.Count();
+            totalPaginas = Convert.ToInt32(Math.Ceiling((totalItens * 1.0) / tamanho));
+            this.MudarPagina(1);
+        }
+    }
+
+    private void MudarPagina(int pageNumber)
+    {
+        var indice = pageNumber - 1;
+        cinemasPorPagina = cinemas!
+            .Skip(tamanho * indice)
+            .Take(tamanho)
+            .ToList();
     }
 }

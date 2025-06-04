@@ -1,6 +1,55 @@
-﻿@page "/editar-cinema"
-<h3>EditarCinema</h3>
+﻿@page "/editar-cinema{NomeArtista}"
+@inject CinemaAPI cinemaAPI
+@inject NavigationManager navigationManager
+<MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
+
+    <MudText Class="mt-8" Typo="Typo.h4">Edição de Cinema</MudText>
+
+    <MudForm>
+
+        <MudTextField Class="mt-4" T="string" Placeholder="Nome do Cinema"
+                      Variant="Variant.Outlined"
+                      @bind-Value="nome"
+                      Required="true"
+                      RequiredError="Campo obrigatório." />
+
+        @*  <MudTextField Class="mt-4" T="string" Placeholder="Biografia do artista"
+                      Variant="Variant.Outlined"
+                      Lines="4"
+                      Required="true"
+                      RequiredError="Campo obrigatório." /> *@
+
+        <div class="d-flex align-center justify-space-between mt-4">
+            <MudButton Variant="Variant.Filled"
+                       @onclick="Cadastrar"
+                       Color="Color.Primary"
+                       Class="ml-auto">
+                Cadastrar
+            </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       @onclick="Listar"
+                       Color="Color.Primary"
+                       Class="ml-auto">
+                Ver cinemas cadastrados
+            </MudButton>
+        </div>
+
+    </MudForm>
+</MudPaper>
 
 @code {
+    private string? nome;
+    [Parameter]
+    public string? NomeArtista { get; set; }
+    public CinemaResponse cinemaResponse { get; set; }
 
+    private async Task Deletar()
+    {
+        await cinemaAPI.DeleteCinemaAsync(cinemaResponse!.Id);
+    }
+
+    private async Task Listar()
+    {
+        navigationManager.NavigateTo("/cinemas");
+    }
 }

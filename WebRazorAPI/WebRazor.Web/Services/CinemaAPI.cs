@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using WebRazor.Web.Requests;
 using WebRazor.Web.Response;
 
 namespace WebRazor.Web.Services;
@@ -13,5 +14,20 @@ public class CinemaAPI
     public async Task<ICollection<CinemaResponse>?> GetCinemasAsync()
     {
         return await _httpClient.GetFromJsonAsync<ICollection<CinemaResponse>>("cinemas");
+    }
+
+    public async Task AddCinemasAsync(CinemaRequest cinemaRequest)
+    {
+        await _httpClient.PostAsJsonAsync("cinemas", cinemaRequest);
+    }
+
+    public async Task DeleteCinemasAsync(int id)
+    {
+        await _httpClient.DeleteAsync($"cinemas/{id}");
+    }
+
+    public async Task GetCinemaPorNomeAsync(string nome)
+    {
+        await _httpClient.GetFromJsonAsync<CinemaResponse>($"cinemas/{nome}");
     }
 }

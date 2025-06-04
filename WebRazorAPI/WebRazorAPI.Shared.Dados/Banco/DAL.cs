@@ -4,7 +4,7 @@ namespace WebRazorAPI.Banco;
 
 public class DAL<T> where T : class
 {
-    protected readonly WebRazorContext context;
+    private readonly WebRazorContext context;
 
     public DAL(WebRazorContext context)
     {

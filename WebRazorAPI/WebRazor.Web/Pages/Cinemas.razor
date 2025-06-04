@@ -1,0 +1,21 @@
+﻿@page "/cinemas"
+@inject CinemaAPI cinemaAPI
+<h3>Cinemas</h3>
+@if(cinemas is not null){
+    <MudGrid> 
+    @foreach(var cinema in cinemas)
+    {
+        <MudItem xs="3">
+        <CardCinema Cinema="cinema"/>
+        </MudItem>
+    }
+    </MudGrid>
+}
+@code {
+    private ICollection<CinemaResponse>? cinemas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cinemas = await cinemaAPI.GetCinemasAsync();
+    }
+}

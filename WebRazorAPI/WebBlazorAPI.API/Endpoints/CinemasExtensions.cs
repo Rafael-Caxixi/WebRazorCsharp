@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebBlazorAPI.API.Requests;
+using WebBlazorAPI.API.Response;
 using WebRazorAPI.Banco;
 using WebRazorAPI.Modelos;
 
@@ -8,13 +10,21 @@ public static class CinemasExtensions
 {
     public static void AddEndPointsCinemas(this WebApplication app)
     {
-        app.MapGet("/Cinemas", ([FromServices] DAL<Cinema> dal) =>
+
+        app.MapGet("/cinemas", ([FromServices] DAL<Cinema> dal) =>
         {
-            return Results.Ok(dal.Listar());
+            var listaDeCinamas = dal.Listar();
+            if (listaDeCinamas is null)
+            {
+                return Results.NotFound();
+            }
+
+            var listaCinemasResponse = EntityListToResponseList(listaDeCinamas);
+            return Results.Ok(listaCinemasResponse);
         });
 
 
-        app.MapGet("/Cinemas/{nome}", ([FromServices] DAL<Cinema> dal, string nome) =>
+        app.MapGet("/cinemas/{nome}", ([FromServices] DAL<Cinema> dal, string nome) =>
         {
             var cinema = dal.RecuperaPor(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
 
@@ -22,16 +32,17 @@ public static class CinemasExtensions
             {
                 return Results.NotFound("Cinema não encontrado.");
             }
-            return Results.Ok(cinema);
+            return Results.Ok(new CinemaResponse(cinema.Id, cinema.Nome));
         });
 
-        app.MapPost("/Cinemas", ([FromServices] DAL<Cinema> dal, [FromBody] Cinema cinema) =>
+        app.MapPost("/cinemas", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequest cinemaRequest) =>
         {
+            var cinema = new Cinema(cinemaRequest.nome);
             dal.Adicionar(cinema);
-            return Results.Created($"/Cinemas/{cinema.Nome}", cinema);
+            return Results.Created($"/cinemas/{cinema.Nome}", cinemaRequest);
         });
 
-        app.MapDelete("/Cinemas/{id}", ([FromServices] DAL<Cinema
+        app.MapDelete("/cinemas/{id}", ([FromServices] DAL<Cinema
     > dal, int id) =>
         {
             var cinema = dal.RecuperaPor(c => c.Id == id);
@@ -43,16 +54,26 @@ public static class CinemasExtensions
             return Results.Ok($"Cinema {cinema.Nome} deletado com sucesso.");
         });
 
-        app.MapPut("/Cinemas/{id}", ([FromServices] DAL<Cinema> dal, [FromBody] Cinema cinema, int id) =>
+        app.MapPut("/cinemas/{id}", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequestEdit cinemaRequest) =>
         {
-            var cinemaExistente = dal.RecuperaPor(c => c.Id == id);
+            var cinemaExistente = dal.RecuperaPor(c => c.Id == cinemaRequest.id);
             if (cinemaExistente is null)
             {
                 return Results.NotFound("Cinema não encontrado.");
             }
-            cinemaExistente.Nome = cinema.Nome;
+            cinemaExistente.Nome = cinemaRequest.nome;
             dal.Atualizar(cinemaExistente);
-            return Results.Ok($"Cinema {cinema.Nome} atualizado com sucesso.");
+            return Results.Ok($"Cinema {cinemaExistente.Nome} atualizado com sucesso.");
         });
+    }
+
+    private static ICollection<CinemaResponse> EntityListToResponseList(IEnumerable<Cinema> listaCinemasResponse)
+    {
+        return listaCinemasResponse.Select(c => EntityToResponse(c)).ToList();
+    }
+
+    private static CinemaResponse EntityToResponse(Cinema cinema)
+    {
+        return new CinemaResponse(cinema.Id, cinema.Nome);
     }
 }

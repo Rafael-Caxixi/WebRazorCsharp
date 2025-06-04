@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRazorAPI.Banco;
 
@@ -10,9 +11,11 @@ using WebRazorAPI.Banco;
 namespace WebRazorAPI.Migrations
 {
     [DbContext(typeof(WebRazorContext))]
-    partial class WebRazorContextModelSnapshot : ModelSnapshot
+    [Migration("20250527233405_DeleteColunaGenero")]
+    partial class DeleteColunaGenero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

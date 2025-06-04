@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRazorAPI.Shared.Modelos"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRazorAPI.Shared.Dados", "WebRazorAPI.Shared.Dados\WebRazorAPI.Shared.Dados.csproj", "{75AB2C81-6B3B-44F5-9B32-90D6F1AC1E3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebRazor.Web", "WebRazor.Web\WebRazor.Web.csproj", "{579857AC-6A4F-42E4-B8E1-0E1A7A86CF87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{75AB2C81-6B3B-44F5-9B32-90D6F1AC1E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75AB2C81-6B3B-44F5-9B32-90D6F1AC1E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75AB2C81-6B3B-44F5-9B32-90D6F1AC1E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{579857AC-6A4F-42E4-B8E1-0E1A7A86CF87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579857AC-6A4F-42E4-B8E1-0E1A7A86CF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579857AC-6A4F-42E4-B8E1-0E1A7A86CF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579857AC-6A4F-42E4-B8E1-0E1A7A86CF87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

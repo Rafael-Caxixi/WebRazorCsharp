@@ -12,10 +12,30 @@ public class WebRazorContext : DbContext
 
     private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MeuFilmeDB;Integrated Security=True;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
+    public WebRazorContext(DbContextOptions options) : base(options)
+    {
+
+    }
+
+    //public WebRazorContext()
+    //{
+    //}
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        if (optionsBuilder.IsConfigured)
+        {
+            return;
+        }
         optionsBuilder
             .UseSqlServer(connectionString)
             .UseLazyLoadingProxies();
     }
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder
+    //        .UseSqlServer(connectionString)
+    //        .UseLazyLoadingProxies();
+    //}
 }

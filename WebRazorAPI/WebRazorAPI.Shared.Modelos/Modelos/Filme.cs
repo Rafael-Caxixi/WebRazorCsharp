@@ -5,18 +5,16 @@ public class Filme
     public string Nome { get; set; }
     public int AnoLancamento { get; set; }
     public bool Ativo { get; set; }
-    public Genero Genero { get; set; }
     public int CinemaId { get; set; }
     public virtual Cinema? Cinema { get; set; }
 
 
-    public Filme( string nome, int anoLancamento, int cinemaId, Genero genero)
+    public Filme( string nome, int anoLancamento, int cinemaId)
     {
         Nome = nome;
         AnoLancamento = anoLancamento;
         Ativo = true;
         CinemaId = cinemaId;
-        Genero = genero;
     }
 
     public Filme()
@@ -25,6 +23,6 @@ public class Filme
 
     public override string ToString()
     {
-        return $"Id: {Id}, Nome: {Nome}, Ano de Lançamento: {AnoLancamento}, Ativo: {Ativo}, Gênero: {Genero}";
+        return $"Id: {Id}, Nome: {Nome}, Ano de Lançamento: {AnoLancamento}, Ativo: {Ativo}";
     }
 }

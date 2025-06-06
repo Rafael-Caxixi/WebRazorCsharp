@@ -1,6 +1,6 @@
-﻿namespace WebRazor.Web.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CinemaRequestEdit(
-    int Id,
-    string Nome
-);
+namespace WebRazor.Web.Requests;
+
+public record CinemaRequestEdit(int Id, string Nome, string? FotoPerfil)
+    : CinemaRequest(Nome, FotoPerfil);

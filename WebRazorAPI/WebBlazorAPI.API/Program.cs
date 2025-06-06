@@ -31,6 +31,8 @@ app.UseCors(options =>
 
 });
 
+app.UseStaticFiles();
+
 app.AddEndPointsCinemas();
 app.AddEndPointsFilmes();
 

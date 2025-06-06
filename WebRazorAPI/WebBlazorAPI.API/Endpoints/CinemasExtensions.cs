@@ -32,12 +32,26 @@ public static class CinemasExtensions
             {
                 return Results.NotFound("Cinema não encontrado.");
             }
-            return Results.Ok(new CinemaResponse(cinema.Id, cinema.Nome));
+            return Results.Ok(EntityToResponse(cinema));
         });
 
-        app.MapPost("/cinemas", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequest cinemaRequest) =>
+        app.MapPost("/cinemas",async ([FromServices]IHostEnvironment env, [FromServices] DAL<Cinema> dal, [FromBody] CinemaRequest cinemaRequest) =>
         {
-            var cinema = new Cinema(cinemaRequest.nome);
+            var nome = cinemaRequest.Nome.Trim();
+            var imagemCinema = DateTime.Now.ToString("ddMMyyyyhhss") + "." + nome + ".jpg";
+
+            var path = Path.Combine(env.ContentRootPath,
+                      "wwwroot", "FotosPerfil", imagemCinema);
+
+            using MemoryStream ms = new MemoryStream(Convert.FromBase64String(cinemaRequest.FotoPerfil!));
+            using FileStream fs = new(path, FileMode.Create);
+            await ms.CopyToAsync(fs);
+
+            var cinema = new Cinema(cinemaRequest.Nome)
+            {
+                FotoPerfil = $"/FotosPerfil/{imagemCinema}"
+            };
+
             dal.Adicionar(cinema);
             return Results.Created($"/cinemas/{cinema.Nome}", cinemaRequest);
         });
@@ -74,6 +88,6 @@ public static class CinemasExtensions
 
     private static CinemaResponse EntityToResponse(Cinema cinema)
     {
-        return new CinemaResponse(cinema.Id, cinema.Nome);
+        return new CinemaResponse(cinema.Id, cinema.Nome,cinema.FotoPerfil);
     }
 }

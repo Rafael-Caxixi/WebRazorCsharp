@@ -1,6 +1,3 @@
 ﻿namespace WebRazor.Web.Response;
 
-public record CinemaResponse(
-    int Id,
-    string Nome
-);
+public record CinemaResponse(int Id, string Nome, string? FotoPerfil);

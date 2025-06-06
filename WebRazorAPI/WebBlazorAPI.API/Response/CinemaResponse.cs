@@ -1,6 +1,3 @@
 ﻿namespace WebBlazorAPI.API.Response;
 
-public record CinemaResponse(
-    int id,
-    string nome
-);
+public record CinemaResponse(int Id, string Nome, string? FotoPerfil);

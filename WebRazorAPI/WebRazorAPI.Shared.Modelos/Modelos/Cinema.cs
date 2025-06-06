@@ -3,6 +3,7 @@ public class Cinema
 {
     public int Id { get; set; }
     public string Nome { get; set; }
+    public string? FotoPerfil { get; set; }
 
     public virtual ICollection<Filme> Filmes { get; set; } = new List<Filme>();
 

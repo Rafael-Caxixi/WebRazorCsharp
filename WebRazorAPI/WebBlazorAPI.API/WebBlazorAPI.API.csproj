@@ -19,4 +19,8 @@
     <ProjectReference Include="..\WebRazorAPI.Shared.Modelos\WebRazorAPI.Shared.Modelos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\FotosPerfil\" />
+  </ItemGroup>
+
 </Project>

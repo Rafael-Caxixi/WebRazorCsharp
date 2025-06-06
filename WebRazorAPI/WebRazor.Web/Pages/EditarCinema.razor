@@ -57,16 +57,16 @@
     private async Task Deletar()
     {
         await cinemaAPI.DeleteCinemaAsync(cinemaResponse!.Id);
-        Snackbar.Add("Cinema deletado com sucesso!", Severity.Success);
+        Snackbar.Add($"Cinema {cinemaResponse.Nome} deletado com sucesso!", Severity.Success);
         await Task.Delay(1000);
         navigationManager.NavigateTo("/cinemas");
     }
 
     public async Task Salvar()
     {
-        var cinemaRequestEdit = new CinemaRequestEdit(cinemaResponse.Id,nome!);
+        var cinemaRequestEdit = new CinemaRequestEdit(cinemaResponse.Id,nome!,"");
         await cinemaAPI.UpdateCinemaAsync(cinemaRequestEdit);
-        Snackbar.Add("Cinema alterado com sucesso!", Severity.Success);
+        Snackbar.Add($"Cinema {cinemaResponse.Nome} alterado com sucesso!", Severity.Success);
         await Task.Delay(1000);
         navigationManager.NavigateTo("/cinemas");
     }

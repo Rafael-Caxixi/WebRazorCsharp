@@ -17,9 +17,9 @@ public class WebRazorContext : DbContext
 
     }
 
-    //public WebRazorContext()
-    //{
-    //}
+    public WebRazorContext()
+    {
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

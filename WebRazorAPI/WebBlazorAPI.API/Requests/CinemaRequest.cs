@@ -1,3 +1,5 @@
-﻿namespace WebBlazorAPI.API.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CinemaRequest(string nome);
+namespace WebBlazorAPI.API.Requests;
+
+public record CinemaRequest([Required] string Nome, string? FotoPerfil);

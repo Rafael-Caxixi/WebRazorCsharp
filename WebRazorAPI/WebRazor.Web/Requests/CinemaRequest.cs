@@ -1,3 +1,5 @@
-﻿namespace WebRazor.Web.Requests;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CinemaRequest(string nome);
+namespace WebRazor.Web.Requests;
+
+public record CinemaRequest([Required]string Nome, string? FotoPerfil);

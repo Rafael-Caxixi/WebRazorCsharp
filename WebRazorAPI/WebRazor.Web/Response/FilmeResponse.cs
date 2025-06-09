@@ -1,9 +1,9 @@
 ﻿namespace WebRazor.Web.Response;
 
 public record FilmeResponse(
-    int id,
-    string nome,
+    int Id,
+    string Nome,
     int anoLancamento,
-    int cinemaId,
-    bool ativo
+    int CinemaId,
+    bool Ativo
 );

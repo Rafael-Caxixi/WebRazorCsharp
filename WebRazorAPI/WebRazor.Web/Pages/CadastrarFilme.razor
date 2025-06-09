@@ -1,19 +1,23 @@
 ﻿@page "/cadastrar-filme"
 @inject CinemaAPI cinemaAPI
+@inject FilmeAPI filmeAPI
+@inject ISnackbar Snackbar
+@inject NavigationManager navigationManager
+
 
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
-    <MudText Class="mt-8" Typo="Typo.h4">Cadastro de Música</MudText>
+    <MudText Class="mt-8" Typo="Typo.h4">Cadastro de Filme</MudText>
 
     <MudForm>
 
-        <MudTextField Class="mt-4" T="string" Placeholder="Nome da música/canção"
+        <MudTextField Class="mt-4" T="string" Placeholder="Nome do filme"
                       @bind-Value="nome"
                       Variant="Variant.Outlined"
                       Required="true"
                       RequiredError="Campo obrigatório." />
-        <MudSelect Class="mt-4" T="CinemaResponse" Label="Cinemas"
-                   Variant="Variant.Filled" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect Class="mt-4" T="CinemaResponse" Label="Filmes"
+                   Variant="Variant.Filled" ValueChanged="CinemaSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (cinemas is not null)
             {
 
@@ -39,11 +43,13 @@
         <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
                        Color="Color.Primary"
+                       @onclick="Cadastrar"
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
             <MudButton Variant="Variant.Filled"
                        Color="Color.Info"
+                       @onclick="Voltar"
                        Class="ml-3">
                 Voltar
             </MudButton>
@@ -59,9 +65,34 @@
 
     private ICollection<CinemaResponse>? cinemas;
 
+    private CinemaResponse? CinemaDoFilme { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         cinemas = await cinemaAPI.GetCinemasAsync();
+    }
+
+    private void CinemaSelecionado(CinemaResponse cinema)
+    {
+        CinemaDoFilme = cinema;
+    }
+
+    public async Task Cadastrar()
+    {
+        if (CinemaDoFilme is not null)
+        {
+            var filmeRequest = new FilmeRequest(nome!, anoLancamento, CinemaDoFilme.Id);
+            await filmeAPI.AddFilmeAsync(filmeRequest);
+            Snackbar.Add("Filme cadastrado com sucesso!", Severity.Success);
+            await Task.Delay(1000);
+            navigationManager.NavigateTo("/filmes-por-cinema");
+        }
+
+    }
+
+    public async Task Voltar()
+    {
+        navigationManager.NavigateTo("/filmes-por-cinema");
     }
 
 }

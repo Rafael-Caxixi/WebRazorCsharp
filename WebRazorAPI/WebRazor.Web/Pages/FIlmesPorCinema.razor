@@ -1,6 +1,48 @@
 ﻿@page "/filmes-por-cinema"
-<h3>FIlmesPorCinema</h3>
+@inject FilmeAPI filmeAPI
+
+<MudStack Class="mt-4 mb-4" Row="true" Justify="Justify.SpaceBetween">
+    <MudText Class="mb-4" Typo="Typo.h4">Filmes cadastrados</MudText>
+    <MudPagination Count="@totalPaginas" SelectedChanged="PaginaMudou"></MudPagination>
+</MudStack>
+@if (filmePorPagina is not null)
+{
+    <MudGrid>
+        @foreach (var filme in filmePorPagina)
+        {
+            <MudItem xs="3">
+                <CardFilme Filme=filme/>
+            </MudItem>            
+        }
+    </MudGrid>
+}
+
 
 @code {
+    private int tamanho = 8;
+    private int totalItens;
+    private int totalPaginas;
+    private ICollection<FilmeResponse>? filmes;
+    private ICollection<FilmeResponse>? filmePorPagina;
 
+    protected override async Task OnInitializedAsync()
+    {
+        filmes = await filmeAPI.GetFilmesAsync();
+        if (filmes is not null)
+        {
+            filmes = filmes.OrderByDescending(a => a.Id).ToList();
+            totalItens = filmes.Count();
+            totalPaginas = Convert.ToInt32(Math.Ceiling((totalItens * 1.0) / tamanho));
+            this.PaginaMudou(1);
+        }
+
+    }
+    private void PaginaMudou(int pageNumber)
+    {
+        var indice = pageNumber - 1;
+        filmePorPagina = filmes!
+            .Skip(tamanho * indice)
+            .Take(tamanho)
+            .ToList();
+    }
 }

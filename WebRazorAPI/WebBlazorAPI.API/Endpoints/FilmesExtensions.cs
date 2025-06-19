@@ -10,8 +10,9 @@ public static class FilmesExtensions
 {
     public static void AddEndPointsFilmes(this WebApplication app)
     {
+        var groupBuilder = app.MapGroup("filmes").RequireAuthorization().WithTags("Filmes");
 
-        app.MapGet("/filmes", ([FromServices] DAL<Filme> dal) =>
+        groupBuilder.MapGet("", ([FromServices] DAL<Filme> dal) =>
         {
             if (dal.Listar().Count() == 0)
             {
@@ -22,7 +23,7 @@ public static class FilmesExtensions
         });
 
 
-        app.MapGet("/filmes/{nome}", ([FromServices] DAL<Filme> dal, string nome) =>
+        groupBuilder.MapGet("{nome}", ([FromServices] DAL<Filme> dal, string nome) =>
         {
             var filme = dal.RecuperaPor(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
 
@@ -33,14 +34,14 @@ public static class FilmesExtensions
             return Results.Ok(new FilmeResponse(filme.Id, filme.Nome, filme.AnoLancamento, filme.CinemaId, filme.Ativo));
         });
 
-        app.MapPost("/filmes", ([FromServices] DAL<Filme> dal, [FromBody] FilmeRequest filmeRequest) =>
+        groupBuilder.MapPost("", ([FromServices] DAL<Filme> dal, [FromBody] FilmeRequest filmeRequest) =>
         {
             var filme = new Filme(filmeRequest.nome, filmeRequest.anoLancamento, filmeRequest.cinemaId);
             dal.Adicionar(filme);
             return Results.Created($"/filmes/{filme.Nome}", filme);
         });
 
-        app.MapDelete("/filmes/{id}", ([FromServices] DAL<Filme
+        groupBuilder.MapDelete("{id}", ([FromServices] DAL<Filme
     > dal, int id) =>
         {
             var filme = dal.RecuperaPor(f => f.Id == id);
@@ -52,7 +53,7 @@ public static class FilmesExtensions
             return Results.Ok($"Filme {filme.Nome} deletado com sucesso.");
         });
 
-        app.MapPut("/filmes/{id}", ([FromServices] DAL<Filme> dal, [FromBody] FilmeRequestEdit filmeRequest) =>
+        groupBuilder.MapPut("", ([FromServices] DAL<Filme> dal, [FromBody] FilmeRequestEdit filmeRequest) =>
         {
             var filmeExistente = dal.RecuperaPor(c => c.Id == filmeRequest.id);
             if (filmeExistente is null)

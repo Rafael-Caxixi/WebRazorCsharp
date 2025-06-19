@@ -10,8 +10,11 @@ public static class CinemasExtensions
 {
     public static void AddEndPointsCinemas(this WebApplication app)
     {
+        var groupBuilder = app.MapGroup("cinemas")
+            .RequireAuthorization()
+            .WithTags("Cinemas");
 
-        app.MapGet("/cinemas", ([FromServices] DAL<Cinema> dal) =>
+        groupBuilder.MapGet("", ([FromServices] DAL<Cinema> dal) =>
         {
             var listaDeCinamas = dal.Listar();
             if (listaDeCinamas is null)
@@ -24,7 +27,7 @@ public static class CinemasExtensions
         });
 
 
-        app.MapGet("/cinemas/{nome}", ([FromServices] DAL<Cinema> dal, string nome) =>
+        groupBuilder.MapGet("{nome}", ([FromServices] DAL<Cinema> dal, string nome) =>
         {
             var cinema = dal.RecuperaPor(a => a.Nome.ToUpper().Equals(nome.ToUpper()));
 
@@ -35,7 +38,7 @@ public static class CinemasExtensions
             return Results.Ok(EntityToResponse(cinema));
         });
 
-        app.MapPost("/cinemas",async ([FromServices]IHostEnvironment env, [FromServices] DAL<Cinema> dal, [FromBody] CinemaRequest cinemaRequest) =>
+        groupBuilder.MapPost("",async ([FromServices]IHostEnvironment env, [FromServices] DAL<Cinema> dal, [FromBody] CinemaRequest cinemaRequest) =>
         {
             var nome = cinemaRequest.Nome.Trim();
             var imagemCinema = DateTime.Now.ToString("ddMMyyyyhhss") + "." + nome + ".jpg";
@@ -56,7 +59,7 @@ public static class CinemasExtensions
             return Results.Created($"/cinemas/{cinema.Nome}", cinemaRequest);
         });
 
-        app.MapDelete("/cinemas/{id}", ([FromServices] DAL<Cinema
+        groupBuilder.MapDelete("{id}", ([FromServices] DAL<Cinema
     > dal, int id) =>
         {
             var cinema = dal.RecuperaPor(c => c.Id == id);
@@ -68,7 +71,7 @@ public static class CinemasExtensions
             return Results.Ok($"Cinema {cinema.Nome} deletado com sucesso.");
         });
 
-        app.MapPut("/cinemas/{id}", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequestEdit cinemaRequest) =>
+        groupBuilder.MapPut("", ([FromServices] DAL<Cinema> dal, [FromBody] CinemaRequestEdit cinemaRequest) =>
         {
             var cinemaExistente = dal.RecuperaPor(c => c.Id == cinemaRequest.Id);
             if (cinemaExistente is null)

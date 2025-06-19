@@ -1,10 +1,12 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using WebRazorAPI.Modelos;
+using WebRazorAPI.Shared.Dados.Modelos;
 
 namespace WebRazorAPI.Banco;
 
-public class WebRazorContext : DbContext
+public class WebRazorContext : IdentityDbContext<PessoaComAcesso, PerfilDeAcesso, int>
 {
 
     public DbSet<Filme> Filmes { get; set; }

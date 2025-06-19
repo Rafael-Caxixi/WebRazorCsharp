@@ -11,8 +11,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
 
-builder.Services.AddTransient<CinemaAPI>();
-builder.Services.AddTransient<FilmeAPI>();
+builder.Services.AddScoped<CinemaAPI>();
+builder.Services.AddScoped<FilmeAPI>();
+builder.Services.AddScoped<AuthAPI>();
 
 builder.Services.AddHttpClient("API", client =>
 {
